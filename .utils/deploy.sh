@@ -31,9 +31,9 @@ ONE_YEAR="31536000"
 
 # script-src and style-src are defined by gatsby-plugin-csp and inserted
 # into a meta tag in each page.
-CSP="\"content-security-policy\": \"connect-src 'self' https://www.google-analytics.com;
+CSP="\"content-security-policy\": \"connect-src 'self' https://www.google-analytics.com https://location.services.mozilla.com;
 base-uri 'self';
-form-action 'none';
+form-action 'self' https://scroll.com;
 frame-ancestors 'self';
 frame-src 'self';
 object-src 'none'\""
@@ -114,6 +114,7 @@ for fn in $(find ${ARTIFACTS} -name 'index.html' -not -path '${ARTIFACTS}/index.
     --include "*.html" \
     --metadata "{${CSP//$'\n'/ }, ${HSTS}, ${TYPE}, ${XSS}}" \
     --metadata-directive "REPLACE" \
+    --website-redirect "/${s3path}/"  \
     --acl "public-read" \
     $fn s3://${CONCEPTS_BUCKET}/${s3path}
 done
